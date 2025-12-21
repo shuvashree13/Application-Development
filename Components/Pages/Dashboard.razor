@@ -1,0 +1,119 @@
+﻿@page "/dashboard"
+
+
+<div class="app-background" style="
+    background-image: url('/images/background.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    min-height: 100vh;
+    width: 100%;
+">
+    <div class="app-background-overlay" style="
+        background-color: rgba(255, 255, 255, 0.3); /* light overlay for readability */
+        min-height: 100vh;
+        width: 100%;
+        padding: 20px;
+        box-sizing: border-box;
+    ">
+        <div class="dashboard">
+            <div class="header">
+                <h3>📊 Dashboard & Analytics</h3>
+            </div>
+
+            <!-- Date Range Filter -->
+            <div class="date-filter" style="display:flex; gap:10px; margin-bottom:20px;">
+                <div>
+                    <label>Start Date</label>
+                    <input type="date" class="form-control" />
+                </div>
+                <div>
+                    <label>End Date</label>
+                    <input type="date" class="form-control" />
+                </div>
+                <button class="btn btn-primary">Apply Filter</button>
+                <button class="btn btn-secondary">Clear</button>
+            </div>
+
+            <!-- Key Metrics -->
+            <div class="metrics-grid" style="display:grid; grid-template-columns:repeat(3, 1fr); gap:15px; margin-bottom:20px;">
+                <div class="metric-card highlight" style="padding:15px; background:#add8e6;color:#000; border-radius:8px; text-align:center;">
+                    <div class="metric-icon" style="font-size:24px;">😊</div>
+                    <div class="metric-label">Most Frequent Mood</div>
+                    <div class="metric-value">Happy</div>
+                </div>
+
+                <div class="metric-card" style="padding:15px; background:#f9f9f9; border-radius:8px; text-align:center;">
+                    <div class="metric-icon" style="font-size:24px;">🔥</div>
+                    <div class="metric-label">Current Streak</div>
+                    <div class="metric-value">5 days</div>
+                </div>
+
+                <div class="metric-card" style="padding:15px; background:#f9f9f9; border-radius:8px; text-align:center;">
+                    <div class="metric-icon" style="font-size:24px;">🏆</div>
+                    <div class="metric-label">Longest Streak</div>
+                    <div class="metric-value">12 days</div>
+                </div>
+
+                <div class="metric-card" style="padding:15px; background:#f9f9f9; border-radius:8px; text-align:center;">
+                    <div class="metric-icon" style="font-size:24px;">📝</div>
+                    <div class="metric-label">Total Entries</div>
+                    <div class="metric-value">23</div>
+                </div>
+
+                <div class="metric-card" style="padding:15px; background:#f9f9f9; border-radius:8px; text-align:center;">
+                    <div class="metric-icon" style="font-size:24px;">💬</div>
+                    <div class="metric-label">Avg Word Count</div>
+                    <div class="metric-value">120</div>
+                </div>
+
+                <div class="metric-card" style="padding:15px; background:#f9f9f9; border-radius:8px; text-align:center;">
+                    <div class="metric-icon" style="font-size:24px;">❌</div>
+                    <div class="metric-label">Missed Days (30d)</div>
+                    <div class="metric-value">3</div>
+                </div>
+            </div>
+
+            <!-- Mood Distribution -->
+            <div class="chart-section" style="margin-bottom:20px;">
+                <h4>Mood Distribution by Category</h4>
+                <ul>
+                    <li><span style="display:inline-block;width:15px;height:15px;background:#4caf50;margin-right:5px;"></span>Positive: 10</li>
+                    <li><span style="display:inline-block;width:15px;height:15px;background:#9e9e9e;margin-right:5px;"></span>Neutral: 8</li>
+                    <li><span style="display:inline-block;width:15px;height:15px;background:#f44336;margin-right:5px;"></span>Negative: 5</li>
+                </ul>
+            </div>
+
+            <!-- Most Used Tags -->
+            <div class="chart-section" style="margin-bottom:20px;">
+                <h4>Most Used Tags</h4>
+                <ul>
+                    <li>#work: 8</li>
+                    <li>#family: 5</li>
+                    <li>#health: 4</li>
+                    <li>#travel: 3</li>
+                </ul>
+            </div>
+
+            <!-- Word Count Trends -->
+            <div class="chart-section" style="margin-bottom:20px;">
+                <h4>Word Count Trends</h4>
+                <ul>
+                    <li>Dec 01: 100 words</li>
+                    <li>Dec 02: 120 words</li>
+                    <li>Dec 03: 150 words</li>
+                    <li>Dec 04: 110 words</li>
+                    <li>Dec 05: 130 words</li>
+                </ul>
+            </div>
+
+            <!-- Recently Missed Days -->
+            <div class="chart-section">
+                <h4>Recently Missed Days (Last 30 Days)</h4>
+                <span class="missed-day" style="margin-right:10px;">Dec 04, 2025</span>
+                <span class="missed-day" style="margin-right:10px;">Dec 07, 2025</span>
+                <span class="missed-day" style="margin-right:10px;">Dec 12, 2025</span>
+            </div>
+        </div>
+    </div>
+</div>

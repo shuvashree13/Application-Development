@@ -1,0 +1,107 @@
+﻿@page "/calendar"
+@using Journal_Entry.Components.Services
+@using Journal_Entry.Components.Models
+@inject JournalService JournalService
+
+<div class="app-background">
+<div class="app-background-overlay">
+<div class="calendar-view">
+    <div class="header">
+        <h3>📅 Calendar View</h3>
+    </div>
+
+    <div class="calendar-controls">
+        <button class="btn btn-secondary" @onclick="PreviousMonth">◀ Previous</button>
+        <h4>@CurrentMonth.ToString("MMMM yyyy")</h4>
+        <button class="btn btn-secondary" @onclick="NextMonth">Next ▶</button>
+    </div>
+
+    <div class="calendar-grid">
+        <!-- Day headers -->
+        <div class="day-header">Sun</div>
+        <div class="day-header">Mon</div>
+        <div class="day-header">Tue</div>
+        <div class="day-header">Wed</div>
+        <div class="day-header">Thu</div>
+        <div class="day-header">Fri</div>
+        <div class="day-header">Sat</div>
+
+        @foreach (var day in CalendarDays)
+        {
+            <div class="day-cell @(day.IsCurrentMonth ? "" : "other-month")">
+                <div class="day-number">@day.Date.Day</div>
+            </div>
+        }
+    </div>
+
+    <div class="streak-panel">
+        <div class="streak-item">
+            <div class="streak-icon">🔥</div>
+            <div class="streak-info">
+                <div class="streak-label">Current Streak</div>
+                <div class="streak-value">0</div>
+            </div>
+        </div>
+        <div class="streak-item">
+            <div class="streak-icon">🏆</div>
+            <div class="streak-info">
+                <div class="streak-label">Longest Streak</div>
+                <div class="streak-value">0</div>
+            </div>
+        </div>
+        <div class="streak-item">
+            <div class="streak-icon">📊</div>
+            <div class="streak-info">
+                <div class="streak-label">Total Entries</div>
+                <div class="streak-value">0</div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+@code {
+    private DateTime CurrentMonth = new(DateTime.Today.Year, DateTime.Today.Month, 1);
+    private List<CalendarDay> CalendarDays = new();
+
+    protected override void OnInitialized()
+    {
+        GenerateCalendar();
+    }
+
+    private void PreviousMonth()
+    {
+        CurrentMonth = CurrentMonth.AddMonths(-1);
+        GenerateCalendar();
+    }
+
+    private void NextMonth()
+    {
+        CurrentMonth = CurrentMonth.AddMonths(1);
+        GenerateCalendar();
+    }
+
+    private void GenerateCalendar()
+    {
+        CalendarDays.Clear();
+
+        var firstDayOfMonth = new DateTime(CurrentMonth.Year, CurrentMonth.Month, 1);
+        var startDay = firstDayOfMonth.AddDays(-(int)firstDayOfMonth.DayOfWeek);
+
+        for (int i = 0; i < 42; i++) // 6 weeks
+        {
+            var date = startDay.AddDays(i);
+            CalendarDays.Add(new CalendarDay
+            {
+                Date = date,
+                IsCurrentMonth = date.Month == CurrentMonth.Month
+            });
+        }
+    }
+
+    private class CalendarDay
+    {
+        public DateTime Date { get; set; }
+        public bool IsCurrentMonth { get; set; }
+    }
+}

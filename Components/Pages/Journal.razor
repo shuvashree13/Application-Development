@@ -1,0 +1,117 @@
+﻿@page "/"
+@using Journal_Entry.Components.Services
+@using Journal_Entry.Components.Models
+@inject JournalService JournalService
+
+
+<div class="app-background" style="
+    background-image: url('/images/background.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    min-height: 100vh;
+    width: 100%;
+">
+    <div class="app-background-overlay" style="
+        background-color: rgba(255, 255, 255, 0.3);
+        min-height: 100vh;
+        width: 100%;
+        padding: 20px;
+        box-sizing: border-box;
+    ">
+        <div class="home-page">
+
+            <!-- Hero Section -->
+            <div class="hero" style="text-align:center; margin-bottom:30px;">
+                <h1>📔 Welcome to Your Journal</h1>
+                <p class="tagline">Capture your thoughts, track your moods, and reflect on your journey</p>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="quick-stats" style="display:flex; gap:15px; flex-wrap:wrap; justify-content:center; margin-bottom:30px;">
+                <div class="stat-card" style="padding:15px; background:#f9f9f9; border-radius:8px; text-align:center; min-width:120px;">
+                    <div class="stat-icon" style="font-size:24px;">🔥</div>
+                    <div class="stat-value" style="font-size:20px; font-weight:bold;">5 days</div>
+                    <div class="stat-label">Day Streak</div>
+                </div>
+
+                <div class="stat-card" style="padding:15px; background:#f9f9f9; border-radius:8px; text-align:center; min-width:120px;">
+                    <div class="stat-icon" style="font-size:24px;">📝</div>
+                    <div class="stat-value" style="font-size:20px; font-weight:bold;">23</div>
+                    <div class="stat-label">Total Entries</div>
+                </div>
+
+                <div class="stat-card" style="padding:15px; background:#f9f9f9; border-radius:8px; text-align:center; min-width:120px;">
+                    <div class="stat-icon" style="font-size:24px;">🏆</div>
+                    <div class="stat-value" style="font-size:20px; font-weight:bold;">12 days</div>
+                    <div class="stat-label">Best Streak</div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="quick-actions" style="display:flex; gap:15px; flex-wrap:wrap; justify-content:center; margin-bottom:30px;">
+                <div class="action-card primary" style="padding:15px; background:#add8e6; border-radius:8px; text-align:center; min-width:180px;">
+                    <div class="action-icon" style="font-size:24px;">✏️</div>
+                    <h3>Write Today's Entry</h3>
+                    <p>Edit your entry for today. Start your daily reflection.</p>
+                </div>
+
+                <div class="action-card" style="padding:15px; background:#f9f9f9; border-radius:8px; text-align:center; min-width:180px;">
+                    <div class="action-icon" style="font-size:24px;">📖</div>
+                    <h3>Browse Entries</h3>
+                    <p>Read and manage your past entries</p>
+                </div>
+
+                <div class="action-card" style="padding:15px; background:#f9f9f9; border-radius:8px; text-align:center; min-width:180px;">
+                    <div class="action-icon" style="font-size:24px;">📅</div>
+                    <h3>Calendar View</h3>
+                    <p>See your journaling journey at a glance</p>
+                </div>
+
+                <div class="action-card" style="padding:15px; background:#f9f9f9; border-radius:8px; text-align:center; min-width:180px;">
+                    <div class="action-icon" style="font-size:24px;">📊</div>
+                    <h3>View Analytics</h3>
+                    <p>Explore insights about your moods and habits</p>
+                </div>
+            </div>
+
+            <!-- Journaling Tips -->
+            <div class="tips-section" style="margin-top:20px;">
+                <h3>💡 Journaling Tips</h3>
+                <div class="tips" style="display:flex; flex-direction:column; gap:10px; margin-top:10px;">
+                    <div class="tip" style="background:#f9f9f9; padding:10px; border-radius:6px;">
+                        <strong>Be Consistent:</strong> Try to write every day, even if it's just a few sentences.
+                    </div>
+                    <div class="tip" style="background:#f9f9f9; padding:10px; border-radius:6px;">
+                        <strong>Be Honest:</strong> Your journal is a safe space for your true thoughts and feelings.
+                    </div>
+                    <div class="tip" style="background:#f9f9f9; padding:10px; border-radius:6px;">
+                        <strong>Reflect:</strong> Use your journal to track patterns and growth over time.
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@code {
+    // private JournalEntry entry = new();
+
+    // protected override void OnInitialized()
+    // {
+    //     var existing = JournalService.GetByDate(DateTime.Today);
+    //     if (existing != null)
+    //         entry = existing;
+    //     else
+    //         entry.CreatedAt = DateTime.Now;
+    // }
+
+    // private void Save()
+    // {
+    //     JournalService.Save(entry);
+    // }
+
+    }
+
+
