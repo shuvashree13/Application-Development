@@ -1,0 +1,24 @@
+﻿@page "/"
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light mb-3">
+    <a class="navbar-brand" href="/">📔 My Journal</a>
+    <div class="collapse navbar-collapse">
+        <ul class="navbar-nav me-auto">
+            <li class="nav-item"><NavLink class="nav-link" href="/journals">Write / Browse</NavLink></li>
+            <li class="nav-item"><NavLink class="nav-link" href="/timeline">Timeline</NavLink></li>
+            <li class="nav-item"><NavLink class="nav-link" href="/calendar">Calendar</NavLink></li>
+            <li class="nav-item"><NavLink class="nav-link" href="/dashboard">Dashboard</NavLink></li>
+            <li class="nav-item"><NavLink class="nav-link" href="/settings">Settings</NavLink></li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container text-center mt-5">
+    <h1>📔 Welcome to Your Journal</h1>
+    <p>Capture your thoughts, track your moods, and reflect on your journey.</p>
+    <div class="d-flex justify-content-center gap-2 mt-4">
+        <NavLink class="btn btn-primary" href="/journals">Write Today's Entry</NavLink>
+        <NavLink class="btn btn-secondary" href="/timeline">View Timeline</NavLink>
+        <NavLink class="btn btn-info text-white" href="/calendar">Calendar View</NavLink>
+    </div>
+</div>

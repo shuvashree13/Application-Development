@@ -1,0 +1,61 @@
+﻿@page "/timeline"
+@using Journal_Entry.Components.Models
+@using Journal_Entry.Components.Services
+@inject JournalService JournalService
+
+
+<h1>📜 Timeline</h1>
+
+<input type="text" placeholder="Search by title/content" @bind="searchTerm" class="form-control mb-2" />
+<button class="btn btn-primary mb-3" @onclick="ApplyFilter">Search/Filter</button>
+
+@if (filteredEntries != null && filteredEntries.Any())
+{
+    @foreach (var e in filteredEntries.OrderByDescending(x => x.CreatedAt))
+    {
+        <div class="entry-card mb-2 p-2 border rounded">
+            <strong>@e.CreatedAt.ToString("yyyy-MM-dd"): @e.Title</strong>
+            <p>@((MarkupString)Markdown.ToHtml(e.Content))</p>
+            <small>
+                Mood: @e.PrimaryMood
+                @if (e.SecondaryMoods != null && e.SecondaryMoods.Any())
+                {
+                    <text> | Secondary: @string.Join(", ", e.SecondaryMoods)</text>
+                }
+                | Tags: @string.Join(", ", e.Tags)
+            </small>
+        </div>
+    }
+}
+else
+{
+    <p>No entries found.</p>
+}
+
+@code {
+    private List<JournalEntry> entries = new();           // Only one entries list
+    private List<JournalEntry> filteredEntries = new();   // Only one filteredEntries list
+    private string searchTerm = "";
+
+    // OnInitializedAsync - only one
+    protected override async Task OnInitializedAsync()
+    {
+        entries = await JournalService.GetAllEntriesAsync(); // Load from SQLite via JournalService
+        filteredEntries = new List<JournalEntry>(entries);
+    }
+
+    private void ApplyFilter()
+    {
+        if (string.IsNullOrWhiteSpace(searchTerm))
+        {
+            filteredEntries = new List<JournalEntry>(entries);
+        }
+        else
+        {
+            filteredEntries = entries
+                .Where(x => (x.Title != null && x.Title.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
+                         || (x.Content != null && x.Content.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)))
+                .ToList();
+        }
+    }
+}

@@ -1,5 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
+
 using Journal_Entry.Components.Services;
+SQLitePCL.Batteries.Init();
+
 
 
 namespace Journal_Entry
@@ -18,6 +21,7 @@ namespace Journal_Entry
 
             builder.Services.AddMauiBlazorWebView();
             builder.Services.AddSingleton<JournalService>();
+            builder.Services.AddSingleton<PdfExportService>();
 
 #if DEBUG
             builder.Services.AddBlazorWebViewDeveloperTools();
