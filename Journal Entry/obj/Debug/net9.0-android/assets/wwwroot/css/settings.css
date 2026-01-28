@@ -1,0 +1,437 @@
+﻿/* Settings Page CSS - Organized Sections Design */
+/* Original design by: Journal Entry App Team */
+/* Design concept: Clean settings with categorized sections */
+
+.settings-main-container {
+    max-width: 1000px;
+    margin: 2rem auto;
+    padding: 0 2rem;
+}
+
+.settings-hero-section {
+    background: linear-gradient(135deg, var(--primary-gradient-start), var(--primary-gradient-end));
+    color: white;
+    border-radius: 20px;
+    padding: 3rem;
+    margin-bottom: 3rem;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.25);
+}
+
+.settings-hero-title {
+    font-size: 2.6rem;
+    font-weight: 300;
+    margin-bottom: 0.75rem;
+}
+
+.settings-hero-subtitle {
+    font-size: 1.15rem;
+    opacity: 0.9;
+}
+
+/* Settings sections */
+.settings-section-block {
+    background: var(--card-bg);
+    border: 1px solid var(--border-soft);
+    border-radius: 16px;
+    padding: 2.5rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow-paper);
+}
+
+.settings-section-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 2px solid var(--border-soft);
+}
+
+.settings-section-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--accent-warm), var(--primary-gradient-start));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+}
+
+.settings-section-title {
+    font-size: 1.7rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+/* Individual setting items */
+.settings-item-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid var(--border-soft);
+}
+
+    .settings-item-row:last-child {
+        border-bottom: none;
+    }
+
+.settings-item-info {
+    flex: 1;
+    margin-right: 2rem;
+}
+
+.settings-item-name {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.settings-item-description {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+.settings-item-control {
+    flex-shrink: 0;
+}
+
+/* Theme selector with visual preview */
+.settings-theme-selector {
+    display: flex;
+    gap: 1rem;
+}
+
+.settings-theme-option {
+    flex: 1;
+    padding: 1.25rem;
+    border: 3px solid var(--border-soft);
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    background: var(--paper-bg);
+}
+
+    .settings-theme-option:hover {
+        border-color: var(--accent-warm);
+        transform: scale(1.05);
+    }
+
+    .settings-theme-option.active {
+        border-color: var(--primary-gradient-start);
+        background: rgba(102, 126, 234, 0.08);
+    }
+
+.settings-theme-preview {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin: 0 auto 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+}
+
+    .settings-theme-preview.light-preview {
+        background: linear-gradient(135deg, #fdfbf7, #ebe9e1);
+    }
+
+    .settings-theme-preview.dark-preview {
+        background: linear-gradient(135deg, #2a2621, #1e1b17);
+    }
+
+.settings-theme-name {
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 1.05rem;
+}
+
+/* Password section */
+.settings-password-form {
+    margin-top: 1.5rem;
+    padding: 2rem;
+    background: var(--paper-bg);
+    border: 2px dashed var(--border-soft);
+    border-radius: 12px;
+}
+
+.settings-input-group {
+    margin-bottom: 1.5rem;
+}
+
+.settings-input-label {
+    display: block;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.6rem;
+    font-size: 0.95rem;
+}
+
+.settings-input-field {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid var(--border-soft);
+    border-radius: 10px;
+    font-size: 1rem;
+    background: var(--card-bg);
+}
+
+.settings-error-message {
+    background: #ffebee;
+    color: #c62828;
+    padding: 0.875rem 1.25rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+    font-size: 0.95rem;
+    border-left: 4px solid #c62828;
+}
+
+body.dark-theme .settings-error-message {
+    background: rgba(198, 40, 40, 0.2);
+    color: #ff5252;
+}
+
+.settings-form-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.settings-btn-save {
+    flex: 1;
+    padding: 1rem;
+    background: linear-gradient(135deg, #4caf50, #45a049);
+    color: white;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.settings-btn-cancel {
+    flex: 1;
+    padding: 1rem;
+    background: transparent;
+    color: var(--text-secondary);
+    border: 2px solid var(--border-soft);
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+/* Export section */
+.settings-export-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.settings-export-card {
+    padding: 2rem;
+    background: var(--paper-bg);
+    border: 1px solid var(--border-soft);
+    border-radius: 14px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+    .settings-export-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-paper);
+    }
+
+.settings-export-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.settings-export-format {
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.settings-export-desc {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+}
+
+.settings-export-btn {
+    padding: 0.75rem 2rem;
+    background: var(--accent-warm);
+    color: white;
+    border-radius: 25px;
+    font-weight: 600;
+}
+
+/* Export dialog */
+.settings-export-dialog {
+    margin-top: 2rem;
+    padding: 2rem;
+    background: var(--paper-bg);
+    border: 2px solid var(--border-soft);
+    border-radius: 14px;
+}
+
+.settings-dialog-title {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+}
+
+.settings-date-range {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.settings-date-input {
+    padding: 1rem;
+    border: 2px solid var(--border-soft);
+    border-radius: 10px;
+    font-size: 1rem;
+}
+
+.settings-export-status {
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    font-weight: 500;
+}
+
+    .settings-export-status.info {
+        background: rgba(33, 150, 243, 0.1);
+        color: #1976d2;
+        border: 1px solid rgba(33, 150, 243, 0.3);
+    }
+
+    .settings-export-status.success {
+        background: rgba(76, 175, 80, 0.1);
+        color: #388e3c;
+        border: 1px solid rgba(76, 175, 80, 0.3);
+    }
+
+/* Danger zone */
+.settings-danger-zone {
+    border-color: #ef5350;
+    border-width: 2px;
+}
+
+    .settings-danger-zone .settings-section-icon {
+        background: linear-gradient(135deg, #ef5350, #e53935);
+    }
+
+    .settings-danger-zone .settings-section-title {
+        color: #d32f2f;
+    }
+
+body.dark-theme .settings-danger-zone .settings-section-title {
+    color: #ef5350;
+}
+
+.settings-danger-warning {
+    background: rgba(239, 83, 80, 0.1);
+    border: 2px solid rgba(239, 83, 80, 0.3);
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.settings-danger-warning-text {
+    color: #d32f2f;
+    font-weight: 600;
+    font-size: 1.05rem;
+}
+
+body.dark-theme .settings-danger-warning-text {
+    color: #ef5350;
+}
+
+.settings-danger-btn {
+    padding: 1rem 2.5rem;
+    background: #d32f2f;
+    color: white;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+    .settings-danger-btn:hover {
+        background: #c62828;
+    }
+
+/* Confirmation dialog */
+.settings-confirm-dialog {
+    margin-top: 1.5rem;
+    padding: 2rem;
+    background: rgba(239, 83, 80, 0.05);
+    border: 2px dashed #ef5350;
+    border-radius: 12px;
+}
+
+.settings-confirm-text {
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.75rem;
+}
+
+.settings-confirm-instruction {
+    color: var(--text-secondary);
+    margin-bottom: 1.25rem;
+}
+
+.settings-confirm-input {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid #ef5350;
+    border-radius: 10px;
+    font-size: 1rem;
+    text-align: center;
+    font-weight: 600;
+    background: var(--card-bg);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .settings-main-container {
+        padding: 0 1rem;
+    }
+
+    .settings-section-block {
+        padding: 1.75rem;
+    }
+
+    .settings-item-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.25rem;
+    }
+
+    .settings-item-control {
+        width: 100%;
+    }
+
+    .settings-export-options {
+        grid-template-columns: 1fr;
+    }
+
+    .settings-date-range {
+        grid-template-columns: 1fr;
+    }
+
+    .settings-theme-selector {
+        flex-direction: column;
+    }
+}

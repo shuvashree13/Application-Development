@@ -1,0 +1,362 @@
+﻿.journal-container {
+    min-height: 100vh;
+    background-image: url('../images/background.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    padding: 2rem 1rem;
+    overflow-x: hidden;
+}
+
+/* Page content wrapper */
+.journal-content-wrapper {
+    max-width: 950px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.50);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 2.5rem;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+}
+
+body.dark-theme .journal-content-wrapper {
+    background: rgba(42, 38, 33, 0.50);
+}
+
+/* Page heading */
+h1 {
+    font-family: 'Georgia', serif;
+    font-size: 2.5rem;
+    color: var(--text-primary);
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 3px solid var(--accent-warm);
+    text-align: center;
+}
+
+h3 {
+    font-family: 'Georgia', serif;
+    font-size: 2rem;
+    color: var(--text-primary);
+    margin: 2.5rem 0 1.5rem 0;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid var(--border-soft);
+}
+
+/* Writing area with diary paper effect */
+.mb-3 {
+    background: var(--card-bg);
+    border: 2px solid var(--border-soft);
+    border-radius: 16px;
+    padding: 2.5rem;
+    margin-bottom: 2.5rem;
+    box-shadow: var(--shadow-paper);
+    position: relative;
+}
+
+    /* Decorative corner elements */
+    .mb-3::before {
+        content: '✦';
+        position: absolute;
+        top: 1.5rem;
+        left: 1.5rem;
+        color: var(--accent-warm);
+        font-size: 1.5rem;
+        opacity: 0.4;
+    }
+
+    .mb-3::after {
+        content: '✦';
+        position: absolute;
+        bottom: 1.5rem;
+        right: 1.5rem;
+        color: var(--accent-warm);
+        font-size: 1.5rem;
+        opacity: 0.4;
+    }
+
+/* Title input styled as handwritten */
+.form-control[placeholder="Title"] {
+    background: transparent;
+    border: none;
+    border-bottom: 3px solid var(--accent-warm);
+    font-family: 'Georgia', serif;
+    font-size: 1.6rem;
+    color: var(--text-primary);
+    padding: 1rem 0;
+    margin-bottom: 1.5rem;
+    font-style: italic;
+    border-radius: 0;
+}
+
+    .form-control[placeholder="Title"]:focus {
+        outline: none;
+        border-bottom-color: var(--primary-gradient-start);
+        box-shadow: none;
+    }
+
+/* Content textarea with notebook lines */
+.form-control[placeholder="Write in Markdown..."] {
+    background: transparent;
+    border: none;
+    font-family: 'Georgia', serif;
+    font-size: 1.1rem;
+    line-height: 2rem;
+    color: var(--text-primary);
+    min-height: 350px;
+    padding: 0;
+    resize: vertical;
+    background-image: repeating-linear-gradient( transparent, transparent 31px, var(--border-soft) 31px, var(--border-soft) 32px );
+    background-attachment: local;
+}
+
+    .form-control[placeholder="Write in Markdown..."]:focus {
+        outline: none;
+        box-shadow: none;
+    }
+
+/* Select dropdown */
+select.form-control {
+    background: var(--paper-bg);
+    border: 2px solid var(--border-soft);
+    padding: 1rem;
+    border-radius: 10px;
+    font-size: 1rem;
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+}
+
+    select.form-control:focus {
+        border-color: var(--accent-warm);
+        box-shadow: 0 0 0 3px rgba(166, 124, 82, 0.1);
+    }
+
+/* Label styling */
+label {
+    display: block;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.75rem;
+    margin-top: 1rem;
+    font-size: 1rem;
+}
+
+/* Input fields for moods and tags */
+.form-control[placeholder*="e.g."] {
+    background: var(--paper-bg);
+    border: 2px dashed var(--border-soft);
+    padding: 1rem;
+    border-radius: 10px;
+    font-size: 1rem;
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+}
+
+    .form-control[placeholder*="e.g."]:focus {
+        border-color: var(--accent-warm);
+        border-style: solid;
+        box-shadow: 0 0 0 3px rgba(166, 124, 82, 0.1);
+    }
+
+/* Save button with pen icon effect */
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary-gradient-start), var(--primary-gradient-end));
+    color: white;
+    padding: 1rem 3rem;
+    border-radius: 30px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border: none;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+    .btn-primary::before {
+        content: '✎';
+        position: absolute;
+        left: -30px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 1.5rem;
+        transition: left 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(139, 111, 71, 0.4);
+        padding-left: 3.5rem;
+    }
+
+        .btn-primary:hover::before {
+            left: 1.5rem;
+        }
+
+/* Divider */
+hr {
+    border: none;
+    border-top: 2px dashed var(--border-soft);
+    margin: 3rem 0 2rem 0;
+}
+
+/* Entry cards with vintage style */
+.entry-card {
+    background: var(--card-bg);
+    border: 2px solid var(--border-soft) !important;
+    border-left: 5px solid var(--accent-warm) !important;
+    border-radius: 12px !important;
+    padding: 2rem !important;
+    margin-bottom: 2rem !important;
+    box-shadow: var(--shadow-paper);
+    transition: all 0.3s ease;
+}
+
+    .entry-card:hover {
+        transform: translateX(8px);
+        box-shadow: var(--shadow-hover);
+        border-left-color: var(--primary-gradient-start) !important;
+    }
+
+    .entry-card strong {
+        font-family: 'Georgia', serif;
+        font-size: 1.4rem;
+        color: var(--text-primary);
+        display: block;
+        margin-bottom: 1rem;
+        font-style: italic;
+    }
+
+    .entry-card p {
+        color: var(--text-secondary);
+        line-height: 1.8;
+        margin: 1rem 0;
+        font-size: 1.05rem;
+    }
+
+    .entry-card small {
+        display: block;
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px dashed var(--border-soft);
+    }
+
+    /* Action buttons for entries */
+    .entry-card .mt-1 {
+        display: flex;
+        gap: 0.75rem;
+        margin-top: 1.5rem !important;
+    }
+
+.btn-warning {
+    background: var(--accent-warm);
+    color: white;
+    padding: 0.6rem 1.5rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+    .btn-warning:hover {
+        background: var(--primary-gradient-start);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(166, 124, 82, 0.3);
+    }
+
+.btn-danger {
+    background: transparent;
+    color: #d64545;
+    border: 2px solid #d64545;
+    padding: 0.6rem 1.5rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+    .btn-danger:hover {
+        background: #d64545;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(214, 69, 69, 0.3);
+    }
+
+.btn-sm {
+    padding: 0.5rem 1.25rem;
+}
+
+.me-1 {
+    margin-right: 0.5rem;
+}
+
+/* No entries state */
+.no-entries {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: var(--text-secondary);
+}
+
+.no-entries-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    opacity: 0.4;
+}
+
+/* Markdown preview styling */
+.entry-card p strong {
+    color: var(--primary-gradient-start);
+}
+
+.entry-card p em {
+    font-style: italic;
+    color: var(--text-secondary);
+}
+
+.entry-card p code {
+    background: var(--paper-bg);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .journal-container {
+        padding: 1rem 0.5rem;
+    }
+
+    .journal-content-wrapper {
+        padding: 1.75rem 1.25rem;
+    }
+
+    .mb-3 {
+        padding: 1.75rem 1.25rem;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    h3 {
+        font-size: 1.6rem;
+    }
+
+    .entry-card {
+        padding: 1.5rem !important;
+    }
+
+        .entry-card .mt-1 {
+            flex-direction: column;
+        }
+
+    .btn-warning,
+    .btn-danger {
+        width: 100%;
+    }
+}

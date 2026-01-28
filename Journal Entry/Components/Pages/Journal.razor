@@ -1,0 +1,273 @@
+﻿<link href="css/journal.css" rel="stylesheet" />
+
+@page "/journal"
+@using Journal_Entry.Components.Services
+@using Journal_Entry.Components.Models
+@using Markdig
+@inject JournalService JournalService
+@inject IJSRuntime JS
+
+<div class="journal-container">
+    <div class="journal-content-wrapper">
+        <h1><span class="emoji">&#x270F;&#xFE0F;</span> Write Today's Journal</h1>
+
+        @if (isPasswordProtected && !isUnlocked)
+        {
+            <!-- Password Challenge Dialog -->
+            <div class="password-challenge">
+                <div class="password-box">
+                    <div class="password-header">
+                        <h3><span class="emoji">&#x1F512;</span> This journal is password protected</h3>
+                        <p>Enter your password to write an entry</p>
+                    </div>
+
+                    <input type="password"
+                           @bind="enteredPassword"
+                           @onkeypress="HandlePasswordKeyPress"
+                           placeholder="Enter Password"
+                           class="password-input"
+                           autofocus />
+
+                    @if (!string.IsNullOrEmpty(passwordError))
+                    {
+                        <div class="password-error">@passwordError</div>
+                    }
+
+                    <button class="btn btn-primary" @onclick="VerifyPassword">
+                        Unlock
+                    </button>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="mb-3">
+                <input type="text" @bind="entry.Title" placeholder="Title" class="form-control mb-2" />
+
+                <!-- Markdown Toolbar -->
+                <div class="markdown-toolbar">
+                    <button type="button" class="toolbar-btn" @onclick="@(() => InsertMarkdown("**", "**"))" title="Bold">
+                        <strong>B</strong>
+                    </button>
+                    <button type="button" class="toolbar-btn" @onclick="@(() => InsertMarkdown("*", "*"))" title="Italic">
+                        <em>I</em>
+                    </button>
+                    <button type="button" class="toolbar-btn" @onclick="@(() => InsertMarkdown("~~", "~~"))" title="Strikethrough">
+                        <s>S</s>
+                    </button>
+                    <span class="toolbar-divider"></span>
+                    <button type="button" class="toolbar-btn" @onclick="@(() => InsertMarkdown("# ", ""))" title="Heading 1">
+                        H1
+                    </button>
+                    <button type="button" class="toolbar-btn" @onclick="@(() => InsertMarkdown("## ", ""))" title="Heading 2">
+                        H2
+                    </button>
+                    <button type="button" class="toolbar-btn" @onclick="@(() => InsertMarkdown("### ", ""))" title="Heading 3">
+                        H3
+                    </button>
+                    <span class="toolbar-divider"></span>
+                    <button type="button" class="toolbar-btn" @onclick="@(() => InsertMarkdown("- ", ""))" title="Bullet List">
+                        •
+                    </button>
+                    <button type="button" class="toolbar-btn" @onclick="@(() => InsertMarkdown("1. ", ""))" title="Numbered List">
+                        1.
+                    </button>
+                    <button type="button" class="toolbar-btn" @onclick="@(() => InsertMarkdown("> ", ""))" title="Quote">
+                        "
+                    </button>
+                    <span class="toolbar-divider"></span>
+                    <button type="button" class="toolbar-btn" @onclick="InsertLink" title="Link">
+                        <span class="emoji">&#x1F517;</span>
+                    </button>
+                    <button type="button" class="toolbar-btn" @onclick="@(() => InsertMarkdown("`", "`"))" title="Code">
+                        &lt;/&gt;
+                    </button>
+                    <span class="toolbar-divider"></span>
+                    <button type="button" class="toolbar-btn" @onclick="TogglePreview" title="Toggle Preview">
+                        <span class="emoji">&#x1F441;</span>
+                    </button>
+                </div>
+
+                <!-- Textarea and Preview -->
+                <div class="editor-container">
+                    @if (!showPreview)
+                    {
+                        <textarea @ref="textareaRef"
+                                  @bind="entry.Content"
+                                  @bind:event="oninput"
+                                  placeholder="Write in Markdown..."
+                                  class="form-control editor-textarea"></textarea>
+                    }
+                    else
+                    {
+                        <div class="markdown-preview">
+                            @((MarkupString)Markdown.ToHtml(entry.Content ?? ""))
+                        </div>
+                    }
+                </div>
+
+                <!-- Markdown Help -->
+                <div class="markdown-help">
+                    <details>
+                        <summary>Markdown Formatting Help</summary>
+                        <div class="help-content">
+                            <p><strong>**bold**</strong> or <strong>__bold__</strong></p>
+                            <p><em>*italic*</em> or <em>_italic_</em></p>
+                            <p><code>`code`</code></p>
+                            <p># Heading 1</p>
+                            <p>## Heading 2</p>
+                            <p>- Bullet list</p>
+                            <p>1. Numbered list</p>
+                            <p>&gt; Blockquote</p>
+                            <p>[Link text](https://example.com)</p>
+                        </div>
+                    </details>
+                </div>
+
+                <select @bind="entry.PrimaryMood" class="form-control mb-2">
+                    <option>Happy</option>
+                    <option>Neutral</option>
+                    <option>Sad</option>
+                    <option>Excited</option>
+                    <option>Calm</option>
+                </select>
+                <label>Secondary Moods (up to 2, comma-separated)</label>
+                <input type="text" @bind="secondaryMoods" class="form-control mb-2" placeholder="e.g. Excited, Calm" />
+                <label>Tags (comma-separated)</label>
+                <input type="text" @bind="tags" class="form-control mb-2" placeholder="e.g. work, health" />
+                <button class="btn btn-primary" @onclick="SaveEntry">Save Entry</button>
+            </div>
+        }
+
+        <hr />
+
+        <h3>Past Entries</h3>
+
+        @if (!entries.Any())
+        {
+            <div class="no-entries">
+                <div class="no-entries-icon"><span class="emoji">&#x1F4D4;</span></div>
+                <p>No entries yet. Start writing your first journal entry!</p>
+            </div>
+        }
+        else
+        {
+            @foreach (var e in entries.OrderByDescending(x => x.CreatedAt))
+            {
+                <div class="entry-card mb-2 p-2 border rounded">
+                    <strong>@e.CreatedAt.ToString("MMMM dd, yyyy"): @e.Title</strong>
+                    <p>@((MarkupString)Markdown.ToHtml(e.Content ?? ""))</p>
+                    <small>
+                        Mood: @e.PrimaryMood
+                        @if (e.SecondaryMoods?.Any() ?? false)
+                        {
+                            <text>| Secondary: @string.Join(", ", e.SecondaryMoods)</text>
+                        }
+                        | Tags: @string.Join(", ", e.Tags ?? new List<string>())
+                    </small>
+                    <div class="mt-1">
+                        <button class="btn btn-sm btn-warning me-1" @onclick="() => EditEntry(e)">Edit</button>
+                        <button class="btn btn-sm btn-danger" @onclick="() => DeleteEntry(e.Id)">Delete</button>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+@code {
+    private JournalEntry entry = new();
+    private List<JournalEntry> entries = new();
+    private string secondaryMoods = "";
+    private string tags = "";
+    private ElementReference textareaRef;
+    private bool showPreview = false;
+
+    // Password protection
+    private bool isPasswordProtected = false;
+    private bool isUnlocked = false;
+    private string enteredPassword = "";
+    private string passwordError = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Check if password is enabled
+        var settings = await JournalService.GetSettingsAsync();
+        isPasswordProtected = settings.IsPasswordEnabled;
+
+        // Load entries (can view past entries without password)
+        var todayEntry = await JournalService.GetEntryByDateAsync(DateTime.Today);
+        if (todayEntry != null) entry = todayEntry;
+        entries = await JournalService.GetAllEntriesAsync();
+    }
+
+    private async Task VerifyPassword()
+    {
+        var settings = await JournalService.GetSettingsAsync();
+        var enteredPasswordHash = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(enteredPassword));
+
+        if (enteredPasswordHash == settings.PasswordHash)
+        {
+            isUnlocked = true;
+            passwordError = "";
+            enteredPassword = "";
+        }
+        else
+        {
+            passwordError = "Incorrect password. Please try again.";
+            enteredPassword = "";
+        }
+    }
+
+    private async Task HandlePasswordKeyPress(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            await VerifyPassword();
+        }
+    }
+
+    private async Task InsertMarkdown(string before, string after)
+    {
+        await JS.InvokeVoidAsync("insertMarkdown", textareaRef, before, after);
+        StateHasChanged();
+    }
+
+    private async Task InsertLink()
+    {
+        await JS.InvokeVoidAsync("insertLink", textareaRef);
+        StateHasChanged();
+    }
+
+    private void TogglePreview()
+    {
+        showPreview = !showPreview;
+    }
+
+    private async Task SaveEntry()
+    {
+        entry.SecondaryMoods = secondaryMoods.Split(',', StringSplitOptions.RemoveEmptyEntries)
+                                             .Select(s => s.Trim()).Take(2).ToList();
+        entry.Tags = tags.Split(',', StringSplitOptions.RemoveEmptyEntries)
+                         .Select(s => s.Trim()).ToList();
+        entry.CreatedAt = entry.CreatedAt == default ? DateTime.Now : entry.CreatedAt;
+        await JournalService.SaveEntryAsync(entry);
+        entry = new JournalEntry();
+        secondaryMoods = "";
+        tags = "";
+        entries = await JournalService.GetAllEntriesAsync();
+    }
+
+    private void EditEntry(JournalEntry e)
+    {
+        entry = e;
+        secondaryMoods = string.Join(", ", e.SecondaryMoods ?? new List<string>());
+        tags = string.Join(", ", e.Tags ?? new List<string>());
+    }
+
+    private async Task DeleteEntry(int id)
+    {
+        await JournalService.DeleteEntryAsync(id);
+        entries = await JournalService.GetAllEntriesAsync();
+    }
+}

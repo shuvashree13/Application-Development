@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <title>Journal Entry</title>
+    <base href="/" />
+    <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/app.css" />
+    <link rel="stylesheet" href="Journal Entry.styles.css" />
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link href="css/landing.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="status-bar-safe-area"></div>
+    <div id="app">Loading...</div>
+
+    <script src="_framework/blazor.webview.js" autostart="false"></script>
+
+    <!-- Markdown Editor Helper Functions -->
+    <script>
+        window.insertMarkdown = function (textarea, before, after) {
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const text = textarea.value;
+            const selectedText = text.substring(start, end);
+
+            const newText = text.substring(0, start) + before + selectedText + after + text.substring(end);
+            textarea.value = newText;
+
+            // Trigger input event to update Blazor binding
+            textarea.dispatchEvent(new Event('input', { bubbles: true }));
+
+            // Set cursor position
+            const newPosition = start + before.length + selectedText.length;
+            textarea.setSelectionRange(newPosition, newPosition);
+            textarea.focus();
+        };
+
+        window.insertLink = function (textarea) {
+            const url = prompt("Enter URL:", "https://");
+            if (url) {
+                const linkText = prompt("Enter link text:", "Link");
+                if (linkText) {
+                    const markdown = `[${linkText}](${url})`;
+                    window.insertMarkdown(textarea, markdown, '');
+                }
+            }
+        };
+    </script>
+</body>
+</html>

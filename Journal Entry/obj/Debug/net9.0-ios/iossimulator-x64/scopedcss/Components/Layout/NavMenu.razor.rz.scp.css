@@ -1,0 +1,116 @@
+/* Navbar CSS - Brown Color Scheme with Button Style */
+
+.navbar[b-gxlr7c4x7w] {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 48px;
+    background: linear-gradient(135deg, #8b6f47 0%, #6b5442 100%);
+    color: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    min-height: 70px;
+}
+
+.nav-brand[b-gxlr7c4x7w] {
+    font-size: 24px;
+    font-weight: 700;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.nav-links[b-gxlr7c4x7w] {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.nav-btn[b-gxlr7c4x7w] {
+    color: white !important;
+    text-decoration: none !important;
+    font-size: 17px;
+    font-weight: 500;
+    padding: 12px 24px;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    display: inline-block;
+}
+
+    .nav-btn:hover[b-gxlr7c4x7w] {
+        background: rgba(255, 255, 255, 0.25);
+        transform: translateY(-3px);
+        border-color: rgba(255, 255, 255, 0.4);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+        text-decoration: none !important;
+    }
+
+    .nav-btn.active[b-gxlr7c4x7w] {
+        background: rgba(255, 255, 255, 0.35);
+        font-weight: 600;
+        border-color: rgba(255, 255, 255, 0.5);
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        text-decoration: none !important;
+    }
+
+/* Remove underline from About link */
+a[b-gxlr7c4x7w] {
+    text-decoration: none !important;
+}
+
+/* Responsive design */
+@media (max-width: 1024px) {
+    .navbar[b-gxlr7c4x7w] {
+        padding: 16px 32px;
+    }
+
+    .nav-links[b-gxlr7c4x7w] {
+        gap: 10px;
+    }
+
+    .nav-btn[b-gxlr7c4x7w] {
+        font-size: 15px;
+        padding: 10px 18px;
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar[b-gxlr7c4x7w] {
+        padding: 14px 20px;
+        min-height: 60px;
+    }
+
+    .nav-brand[b-gxlr7c4x7w] {
+        font-size: 20px;
+    }
+
+    .nav-links[b-gxlr7c4x7w] {
+        gap: 8px;
+    }
+
+    .nav-btn[b-gxlr7c4x7w] {
+        font-size: 14px;
+        padding: 8px 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar[b-gxlr7c4x7w] {
+        flex-direction: column;
+        gap: 15px;
+        padding: 15px;
+    }
+
+    .nav-links[b-gxlr7c4x7w] {
+        flex-wrap: wrap;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .nav-btn[b-gxlr7c4x7w] {
+        font-size: 13px;
+        padding: 7px 12px;
+    }
+}

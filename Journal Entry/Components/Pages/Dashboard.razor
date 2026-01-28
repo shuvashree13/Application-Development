@@ -1,0 +1,258 @@
+﻿<link href="css/dashboard.css" rel="stylesheet" />
+
+@page "/dashboard"
+@using Journal_Entry.Components.Models
+@using Journal_Entry.Components.Services
+@inject JournalService JournalService
+
+<div class="dashboard-container">
+    <div class="dashboard-content-wrapper">
+        <h1><span class="emoji">&#x1F4CA;</span> Dashboard</h1>
+
+        <!-- TOP METRICS -->
+        <div class="row mb-3">
+            <div class="col">
+                <strong>Current Streak</strong>
+                <div class="big-number">@currentStreak</div>
+                <div class="small-label">days</div>
+            </div>
+
+            <div class="col">
+                <strong>Longest Streak</strong>
+                <div class="big-number">@longestStreak</div>
+                <div class="small-label">days</div>
+            </div>
+
+            <div class="col">
+                <strong>Total Entries</strong>
+                <div class="big-number">@entries.Count</div>
+                <div class="small-label">entries</div>
+            </div>
+        </div>
+
+        <!-- QUICK INSIGHTS -->
+        <div class="row mb-4">
+            <div class="col">
+                <strong>Most Frequent Mood</strong>
+                <div style="font-size:1.4rem;margin-top:0.5rem;">
+                    @((MarkupString)GetMoodEmoji(mostFrequentMood)) @mostFrequentMood
+                </div>
+            </div>
+
+            <div class="col">
+                <strong>Average Words / Entry</strong>
+                <div style="font-size:1.4rem;margin-top:0.5rem;">
+                    @averageWordCount
+                </div>
+            </div>
+        </div>
+
+        <!-- MOOD DISTRIBUTION -->
+        <div class="mood-section">
+            <h3>Mood Distribution</h3>
+
+            @if (moodDistribution.Any())
+            {
+                <div class="mood-bars">
+                    @foreach (var kv in moodDistribution.OrderByDescending(x => x.Value))
+                    {
+                        var percentage = entries.Any() ? (kv.Value * 100.0 / entries.Count) : 0;
+
+                        <div class="mood-item">
+                            <div class="mood-name">
+                                <span class="mood-emoji">@((MarkupString)GetMoodEmoji(kv.Key))</span>
+                                <span>@kv.Key</span>
+                            </div>
+                            <div class="mood-bar-track">
+                                <div class="mood-bar-fill" style="width:@percentage%">
+                                    @kv.Value (@percentage.ToString("F1")%)
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <p class="no-data">No mood data available yet.</p>
+            }
+        </div>
+
+        <!-- TAG ANALYTICS -->
+        <div class="mood-section">
+            <h3><span class="emoji">&#x1F3F7;&#xFE0F;</span> Most Used Tags</h3>
+
+            @if (topTags.Any())
+            {
+                @foreach (var tag in topTags)
+                {
+                    var percent = totalTagCount > 0
+                    ? tag.Value * 100.0 / totalTagCount
+                    : 0;
+
+                    <div class="mood-item">
+                        <div class="mood-name">@tag.Key</div>
+                        <div class="mood-bar-track">
+                            <div class="mood-bar-fill" style="width:@percent%">
+                                @tag.Value uses
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <p class="no-data">No tags recorded yet.</p>
+            }
+        </div>
+
+        <!-- WORD COUNT TRENDS -->
+        <div class="mood-section">
+            <h3><span class="emoji">&#x1F4C8;</span> Word Count Trend (Last 7 Entries)</h3>
+
+            @if (recentWordCounts.Any())
+            {
+                <ul>
+                    @foreach (var item in recentWordCounts)
+                    {
+                        <li>
+                            <strong>@item.Date.ToShortDateString()</strong> — @item.WordCount words
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p class="no-data">Not enough data yet.</p>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    private List<JournalEntry> entries = new();
+
+    private int currentStreak;
+    private int longestStreak;
+
+    private Dictionary<string, int> moodDistribution = new();
+    private string mostFrequentMood = "N/A";
+
+    private Dictionary<string, int> tagDistribution = new();
+    private List<KeyValuePair<string, int>> topTags = new();
+    private int totalTagCount;
+
+    private int averageWordCount;
+    private List<(DateTime Date, int WordCount)> recentWordCounts = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        entries = await JournalService.GetAllEntriesAsync();
+
+        CalculateStreaks();
+        CalculateMoodDistribution();
+        CalculateFrequentMood();
+        CalculateTags();
+        CalculateWordCounts();
+    }
+
+    private void CalculateStreaks()
+    {
+        if (!entries.Any()) return;
+
+        var dates = entries.Select(e => e.CreatedAt.Date)
+                           .Distinct()
+                           .OrderByDescending(d => d)
+                           .ToList();
+
+        currentStreak = 0;
+        for (int i = 0; i < dates.Count; i++)
+        {
+            if (dates[i] == DateTime.Today.AddDays(-i))
+                currentStreak++;
+            else
+                break;
+        }
+
+        int temp = 1;
+        longestStreak = 1;
+
+        for (int i = 0; i < dates.Count - 1; i++)
+        {
+            if ((dates[i] - dates[i + 1]).Days == 1)
+            {
+                temp++;
+                longestStreak = Math.Max(longestStreak, temp);
+            }
+            else
+            {
+                temp = 1;
+            }
+        }
+    }
+
+    private void CalculateMoodDistribution()
+    {
+        moodDistribution = entries
+            .GroupBy(e => e.PrimaryMood)
+            .ToDictionary(g => g.Key, g => g.Count());
+    }
+
+    private void CalculateFrequentMood()
+    {
+        if (!moodDistribution.Any()) return;
+
+        mostFrequentMood = moodDistribution
+            .OrderByDescending(m => m.Value)
+            .First().Key;
+    }
+
+    private void CalculateTags()
+    {
+        tagDistribution = entries
+            .Where(e => e.Tags != null && e.Tags.Any())
+            .SelectMany(e => e.Tags)
+            .GroupBy(tag => tag)
+            .ToDictionary(g => g.Key, g => g.Count());
+
+        totalTagCount = tagDistribution.Values.Sum();
+
+        topTags = tagDistribution
+            .OrderByDescending(t => t.Value)
+            .Take(5)
+            .ToList();
+    }
+
+    private void CalculateWordCounts()
+    {
+        if (!entries.Any()) return;
+
+        var counts = entries.Select(e =>
+            e.Content?.Split(' ', StringSplitOptions.RemoveEmptyEntries).Length ?? 0
+        ).ToList();
+
+        averageWordCount = (int)counts.Average();
+
+        recentWordCounts = entries
+            .OrderByDescending(e => e.CreatedAt)
+            .Take(7)
+            .Select(e => (
+                e.CreatedAt.Date,
+                e.Content?.Split(' ', StringSplitOptions.RemoveEmptyEntries).Length ?? 0
+            ))
+            .Reverse()
+            .ToList();
+    }
+
+    private string GetMoodEmoji(string mood) => mood switch
+    {
+        "Happy" => "<span class=\"emoji\">&#x1F60A;</span>",
+        "Excited" => "<span class=\"emoji\">&#x1F603;</span>",
+        "Calm" => "<span class=\"emoji\">&#x1F60C;</span>",
+        "Sad" => "<span class=\"emoji\">&#x1F622;</span>",
+        "Neutral" => "<span class=\"emoji\">&#x1F610;</span>",
+        "Angry" => "<span class=\"emoji\">&#x1F620;</span>",
+        "Anxious" => "<span class=\"emoji\">&#x1F630;</span>",
+        _ => "<span class=\"emoji\">&#x1F610;</span>"
+    };
+}

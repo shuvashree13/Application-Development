@@ -1,0 +1,79 @@
+﻿<link href="css/timeline.css" rel="stylesheet" />
+
+@page "/timeline"
+@using Journal_Entry.Components.Models
+@using Journal_Entry.Components.Services
+@using Markdig
+@inject JournalService JournalService
+
+<div class="timeline-container">
+    <div class="timeline-content-wrapper">
+        <h1><span class="emoji">&#x1F4DC;</span> Timeline</h1>
+
+        <div class="search-section">
+            <div class="search-wrapper">
+                <input type="text"
+                       placeholder="Search by title/content"
+                       @bind="searchTerm"
+                       class="form-control mb-2"
+                       @onkeypress="@(e => { if (e.Key == "Enter") ApplyFilter(); })" />
+                <button class="btn btn-primary mb-3" @onclick="ApplyFilter">Search/Filter</button>
+            </div>
+        </div>
+
+        @if (filteredEntries != null && filteredEntries.Any())
+        {
+            <div class="timeline-main">
+                @foreach (var e in filteredEntries.OrderByDescending(x => x.CreatedAt))
+                {
+                    <div class="entry-card mb-2 p-2 border rounded">
+                        <strong>@e.CreatedAt.ToString("MMMM dd, yyyy")</strong>
+                        <div class="entry-title">@e.Title</div>
+                        <p>@((MarkupString)Markdown.ToHtml(e.Content ?? ""))</p>
+                        <small>
+                            <span>Mood: @e.PrimaryMood</span>
+                            @if (e.SecondaryMoods != null && e.SecondaryMoods.Any())
+                            {
+                                <span>Secondary: @string.Join(", ", e.SecondaryMoods)</span>
+                            }
+                            <span>Tags: @string.Join(", ", e.Tags ?? new List<string>())</span>
+                        </small>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="no-entries">
+                <p>No entries found. Try a different search term.</p>
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    private List<JournalEntry> entries = new();
+    private List<JournalEntry> filteredEntries = new();
+    private string searchTerm = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        entries = await JournalService.GetAllEntriesAsync();
+        filteredEntries = new List<JournalEntry>(entries);
+    }
+
+    private void ApplyFilter()
+    {
+        if (string.IsNullOrWhiteSpace(searchTerm))
+        {
+            filteredEntries = new List<JournalEntry>(entries);
+        }
+        else
+        {
+            filteredEntries = entries
+                .Where(x => (x.Title != null && x.Title.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
+                         || (x.Content != null && x.Content.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)))
+                .ToList();
+        }
+    }
+}

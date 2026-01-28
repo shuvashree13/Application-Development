@@ -1,0 +1,81 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\Users\\SS\\source\\repos\\Journal Entry\\Journal Entry\\obj\\Debug\\net9.0-windows10.0.19041.0\\win10-x64\\scopedcss\\bundle\\Journal_Entry.styles.css",
+      "PackagePath": "staticwebassets\\Journal_Entry.styles.css"
+    },
+    {
+      "Id": "C:\\Users\\SS\\source\\repos\\Journal Entry\\Journal Entry\\wwwroot\\css\\app.css",
+      "PackagePath": "staticwebassets\\css\\app.css"
+    },
+    {
+      "Id": "C:\\Users\\SS\\source\\repos\\Journal Entry\\Journal Entry\\wwwroot\\css\\bootstrap\\bootstrap.min.css",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\bootstrap.min.css"
+    },
+    {
+      "Id": "C:\\Users\\SS\\source\\repos\\Journal Entry\\Journal Entry\\wwwroot\\css\\bootstrap\\bootstrap.min.css.map",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\bootstrap.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\SS\\source\\repos\\Journal Entry\\Journal Entry\\wwwroot\\css\\calender.css",
+      "PackagePath": "staticwebassets\\css\\calender.css"
+    },
+    {
+      "Id": "C:\\Users\\SS\\source\\repos\\Journal Entry\\Journal Entry\\wwwroot\\css\\dashboard.css",
+      "PackagePath": "staticwebassets\\css\\dashboard.css"
+    },
+    {
+      "Id": "C:\\Users\\SS\\source\\repos\\Journal Entry\\Journal Entry\\wwwroot\\css\\home.css",
+      "PackagePath": "staticwebassets\\css\\home.css"
+    },
+    {
+      "Id": "C:\\Users\\SS\\source\\repos\\Journal Entry\\Journal Entry\\wwwroot\\css\\journal.css",
+      "PackagePath": "staticwebassets\\css\\journal.css"
+    },
+    {
+      "Id": "C:\\Users\\SS\\source\\repos\\Journal Entry\\Journal Entry\\wwwroot\\css\\landing.css",
+      "PackagePath": "staticwebassets\\css\\landing.css"
+    },
+    {
+      "Id": "C:\\Users\\SS\\source\\repos\\Journal Entry\\Journal Entry\\wwwroot\\css\\navbar.css",
+      "PackagePath": "staticwebassets\\css\\navbar.css"
+    },
+    {
+      "Id": "C:\\Users\\SS\\source\\repos\\Journal Entry\\Journal Entry\\wwwroot\\css\\settings.css",
+      "PackagePath": "staticwebassets\\css\\settings.css"
+    },
+    {
+      "Id": "C:\\Users\\SS\\source\\repos\\Journal Entry\\Journal Entry\\wwwroot\\css\\timeline.css",
+      "PackagePath": "staticwebassets\\css\\timeline.css"
+    },
+    {
+      "Id": "C:\\Users\\SS\\source\\repos\\Journal Entry\\Journal Entry\\wwwroot\\images\\background.jpeg",
+      "PackagePath": "staticwebassets\\images\\background.jpeg"
+    },
+    {
+      "Id": "C:\\Users\\SS\\source\\repos\\Journal Entry\\Journal Entry\\wwwroot\\index.html",
+      "PackagePath": "staticwebassets\\index.html"
+    },
+    {
+      "Id": "obj\\Debug\\net9.0-windows10.0.19041.0\\win10-x64\\staticwebassets\\msbuild.Journal_Entry.Microsoft.AspNetCore.StaticWebAssetEndpoints.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssetEndpoints.props"
+    },
+    {
+      "Id": "obj\\Debug\\net9.0-windows10.0.19041.0\\win10-x64\\staticwebassets\\msbuild.Journal_Entry.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net9.0-windows10.0.19041.0\\win10-x64\\staticwebassets\\msbuild.build.Journal_Entry.props",
+      "PackagePath": "build\\Journal_Entry.props"
+    },
+    {
+      "Id": "obj\\Debug\\net9.0-windows10.0.19041.0\\win10-x64\\staticwebassets\\msbuild.buildMultiTargeting.Journal_Entry.props",
+      "PackagePath": "buildMultiTargeting\\Journal_Entry.props"
+    },
+    {
+      "Id": "obj\\Debug\\net9.0-windows10.0.19041.0\\win10-x64\\staticwebassets\\msbuild.buildTransitive.Journal_Entry.props",
+      "PackagePath": "buildTransitive\\Journal_Entry.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

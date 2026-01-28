@@ -1,0 +1,25 @@
+wwwroot\css\app.css
+wwwroot\css\bootstrap\bootstrap.min.css
+wwwroot\css\bootstrap\bootstrap.min.css.map
+wwwroot\css\calender.css
+wwwroot\css\dashboard.css
+wwwroot\css\home.css
+wwwroot\css\journal.css
+wwwroot\css\landing.css
+wwwroot\css\navbar.css
+wwwroot\css\settings.css
+wwwroot\css\timeline.css
+wwwroot\images\background.jpeg
+wwwroot\index.html
+C:\Users\SS\source\repos\Journal Entry\Journal Entry\wwwroot\css\app.css
+C:\Users\SS\source\repos\Journal Entry\Journal Entry\wwwroot\css\bootstrap\bootstrap.min.css
+C:\Users\SS\source\repos\Journal Entry\Journal Entry\wwwroot\css\bootstrap\bootstrap.min.css.map
+C:\Users\SS\source\repos\Journal Entry\Journal Entry\wwwroot\css\calender.css
+C:\Users\SS\source\repos\Journal Entry\Journal Entry\wwwroot\css\dashboard.css
+C:\Users\SS\source\repos\Journal Entry\Journal Entry\wwwroot\css\home.css
+C:\Users\SS\source\repos\Journal Entry\Journal Entry\wwwroot\css\journal.css
+C:\Users\SS\source\repos\Journal Entry\Journal Entry\wwwroot\css\landing.css
+C:\Users\SS\source\repos\Journal Entry\Journal Entry\wwwroot\css\navbar.css
+C:\Users\SS\source\repos\Journal Entry\Journal Entry\wwwroot\css\settings.css
+C:\Users\SS\source\repos\Journal Entry\Journal Entry\wwwroot\css\timeline.css
+C:\Users\SS\source\repos\Journal Entry\Journal Entry\wwwroot\index.html
