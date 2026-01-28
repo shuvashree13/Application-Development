@@ -1,0 +1,328 @@
+﻿html, body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    background: url('../images/background.jpeg') center / cover no-repeat fixed;
+}
+
+.home-container {
+    min-height: 100vh;
+    padding: 2rem;
+    margin: 0;
+}
+
+.overlay {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    padding: 3rem;
+    max-width: 1300px;
+    margin: 0 auto;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+}
+
+body.dark-theme .overlay {
+    background: rgba(42, 38, 33, 0.05);
+}
+
+/* Welcome Header */
+.welcome-header {
+    background: linear-gradient(135deg, var(--primary-gradient-start) 0%, var(--primary-gradient-end) 100%);
+    color: white;
+    padding: 3rem;
+    border-radius: 16px;
+    margin-bottom: 3rem;
+    text-align: center;
+    box-shadow: 0 8px 24px rgba(139, 111, 71, 0.3);
+}
+
+    .welcome-header h1 {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        font-weight: 600;
+        color: white;
+    }
+
+    .welcome-header p {
+        font-size: 1.3rem;
+        opacity: 0.95;
+        color: white;
+    }
+
+/* Stats Row */
+.stats-row {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 3rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.stat-card {
+    background: var(--card-bg);
+    border: 2px solid var(--border-soft);
+    border-radius: 16px;
+    padding: 2rem;
+    text-align: center;
+    min-width: 180px;
+    flex: 1;
+    max-width: 250px;
+    box-shadow: var(--shadow-paper);
+    transition: all 0.3s ease;
+}
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-hover);
+    }
+
+.stat-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.stat-label {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+}
+
+.stat-card > div:last-child {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--text-primary);
+}
+
+/* Action Cards */
+.action-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.action-card {
+    background: var(--card-bg);
+    border: 2px solid var(--border-soft);
+    border-radius: 16px;
+    padding: 2.5rem 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-decoration: none;
+    color: var(--text-primary);
+    display: block;
+    box-shadow: var(--shadow-paper);
+}
+
+    .action-card:hover {
+        background: linear-gradient(135deg, var(--primary-gradient-start) 0%, var(--primary-gradient-end) 100%);
+        color: white;
+        border: none;
+        /*transform: translateY(-8px);
+        box-shadow: var(--shadow-hover);
+        border-color: var(--accent-warm);
+        text-decoration: none;*/
+    }
+
+    /*.action-card.primary {
+        background: linear-gradient(135deg, var(--primary-gradient-start) 0%, var(--primary-gradient-end) 100%);
+        color: white;
+        border: none;
+    }
+
+        .action-card.primary:hover {
+            transform: translateY(-8px) scale(1.02);
+        }*/
+
+.action-icon {
+    font-size: 3.5rem;
+    margin-bottom: 1.25rem;
+}
+
+.action-title {
+    font-weight: 700;
+    font-size: 1.3rem;
+    margin-bottom: 0.75rem;
+    color: inherit;
+}
+
+/*.action-card.primary .action-title {
+    color: white;
+}*/
+
+.action-desc {
+    font-size: 1rem;
+    opacity: 0.85;
+    line-height: 1.5;
+    color: inherit;
+}
+
+/*.action-card.primary .action-desc {
+    color: white;
+}*/
+
+/* Write About Section */
+.writeabout-section {
+    margin-top: 3rem;
+    margin-bottom: 2.5rem;
+}
+
+.writeabout-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    padding-bottom: 1.5rem;
+    border-bottom: 2px solid var(--border-soft);
+}
+
+    .writeabout-header span:first-child {
+        font-size: 2.5rem;
+    }
+
+/* Grid container */
+.writeabout-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+/* Individual action cards */
+.writeabout-card {
+    background: var(--card-bg);
+    border: 2px solid var(--border-soft);
+    border-radius: 16px;
+    padding: 2.5rem 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-decoration: none;
+    color: var(--text-primary);
+    display: block;
+    box-shadow: var(--shadow-paper);
+}
+
+    .writeabout-card:hover {
+        transform: translateY(-8px);
+        box-shadow: var(--shadow-hover);
+        border-color: var(--accent-warm);
+    }
+
+/* Card icon */
+.writeabout-card-icon {
+    font-size: 3.5rem;
+    margin-bottom: 1.25rem;
+    display: block;
+}
+
+/* Card description */
+.writeabout-card > div:last-child {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+
+/* Tips Section */
+.tips-section {
+    background: var(--card-bg);
+    border: 2px solid var(--border-soft);
+    border-radius: 16px;
+    padding: 2.5rem;
+    box-shadow: var(--shadow-paper);
+}
+
+.tips-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+    .tips-header span:first-child {
+        font-size: 2.5rem;
+    }
+
+.tip-card {
+    background: var(--paper-bg);
+    border-left: 4px solid var(--accent-warm);
+    padding: 1.75rem;
+    margin-bottom: 1.25rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+    .tip-card:hover {
+        transform: translateX(8px);
+        box-shadow: var(--shadow-paper);
+        border-left-color: var(--primary-gradient-start);
+    }
+
+    .tip-card:last-child {
+        margin-bottom: 0;
+    }
+
+.tip-title {
+    color: var(--primary-gradient-start);
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    font-size: 1.15rem;
+}
+
+.tip-card > div:last-child {
+    color: var(--text-secondary);
+    line-height: 1.7;
+    font-size: 1.05rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .home-container {
+        padding: 1rem;
+    }
+
+    .overlay {
+        padding: 2rem 1.5rem;
+    }
+
+    .welcome-header {
+        padding: 2rem 1.5rem;
+    }
+
+        .welcome-header h1 {
+            font-size: 2rem;
+        }
+
+        .welcome-header p {
+            font-size: 1.1rem;
+        }
+
+    .stats-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .stat-card {
+        max-width: 100%;
+    }
+
+    .action-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .tips-section {
+        padding: 1.75rem;
+    }
+}

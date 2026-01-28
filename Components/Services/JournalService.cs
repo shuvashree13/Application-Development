@@ -8,12 +8,21 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Data.Sqlite;
 using Dapper;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Journal_Entry.Components.Services
 {
+    // Helper class for Dapper to map database results
+    internal class JournalEntryDb
+    {
+        public int Id { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public string Title { get; set; } = string.Empty;
+        public string Content { get; set; } = string.Empty;
+        public string PrimaryMood { get; set; } = "Neutral";
+        public string SecondaryMoods { get; set; } = string.Empty;
+        public string Tags { get; set; } = string.Empty;
+    }
+
     public class JournalService
     {
         private readonly string dbPath;
@@ -56,33 +65,46 @@ namespace Journal_Entry.Components.Services
         public async Task<List<JournalEntry>> GetAllEntriesAsync()
         {
             using var db = Connection;
-            var entries = (await db.QueryAsync<JournalEntry>("SELECT * FROM JournalEntry")).ToList();
-            entries.ForEach(ParseEntryFields);
+            var dbEntries = (await db.QueryAsync<JournalEntryDb>("SELECT * FROM JournalEntry")).ToList();
+            var entries = dbEntries.Select(ConvertFromDb).ToList();
             return entries.OrderByDescending(e => e.CreatedAt).ToList();
         }
 
         public async Task<JournalEntry?> GetEntryByDateAsync(DateTime date)
         {
             using var db = Connection;
-            var entry = await db.QueryFirstOrDefaultAsync<JournalEntry>(
-                "SELECT * FROM JournalEntry WHERE date(CreatedAt)=date(@date)", new { date = date.ToString("yyyy-MM-dd") });
-            if (entry != null) ParseEntryFields(entry);
-            return entry;
+            var dbEntry = await db.QueryFirstOrDefaultAsync<JournalEntryDb>(
+                "SELECT * FROM JournalEntry WHERE date(CreatedAt)=date(@date)",
+                new { date = date.ToString("yyyy-MM-dd") });
+
+            return dbEntry != null ? ConvertFromDb(dbEntry) : null;
         }
 
         public async Task SaveEntryAsync(JournalEntry entry)
         {
             using var db = Connection;
 
-            var secondaryMoods = string.Join(",", entry.SecondaryMoods ?? new List<string>());
-            var tags = string.Join(",", entry.Tags ?? new List<string>());
+            var secondaryMoods = entry.SecondaryMoods != null && entry.SecondaryMoods.Any()
+                ? string.Join(",", entry.SecondaryMoods)
+                : string.Empty;
+            var tags = entry.Tags != null && entry.Tags.Any()
+                ? string.Join(",", entry.Tags)
+                : string.Empty;
 
             if (entry.Id == 0)
             {
                 await db.ExecuteAsync(@"INSERT INTO JournalEntry 
                     (Title, Content, PrimaryMood, SecondaryMoods, Tags, CreatedAt)
                     VALUES (@Title,@Content,@PrimaryMood,@SecondaryMoods,@Tags,@CreatedAt)",
-                    new { entry.Title, entry.Content, entry.PrimaryMood, SecondaryMoods = secondaryMoods, Tags = tags, entry.CreatedAt });
+                    new
+                    {
+                        entry.Title,
+                        entry.Content,
+                        entry.PrimaryMood,
+                        SecondaryMoods = secondaryMoods,
+                        Tags = tags,
+                        entry.CreatedAt
+                    });
             }
             else
             {
@@ -90,7 +112,15 @@ namespace Journal_Entry.Components.Services
                     Title=@Title, Content=@Content, PrimaryMood=@PrimaryMood,
                     SecondaryMoods=@SecondaryMoods, Tags=@Tags
                     WHERE Id=@Id",
-                    new { entry.Title, entry.Content, entry.PrimaryMood, SecondaryMoods = secondaryMoods, Tags = tags, entry.Id });
+                    new
+                    {
+                        entry.Title,
+                        entry.Content,
+                        entry.PrimaryMood,
+                        SecondaryMoods = secondaryMoods,
+                        Tags = tags,
+                        entry.Id
+                    });
             }
         }
 
@@ -113,6 +143,8 @@ namespace Journal_Entry.Components.Services
                     (e.Tags != null && e.Tags.Any(t => t.ToLower().Contains(searchTerm))))
                 .ToList();
         }
+
+        // Filter entries by date range
         public async Task<List<JournalEntry>> FilterAsync(DateTime? startDate, DateTime? endDate)
         {
             var all = await GetAllEntriesAsync();
@@ -138,14 +170,14 @@ namespace Journal_Entry.Components.Services
         public async Task<string> ExportToMarkdownAsync()
         {
             var all = await GetAllEntriesAsync();
-            var sb = new System.Text.StringBuilder();
+            var sb = new StringBuilder();
 
             foreach (var e in all.OrderByDescending(x => x.CreatedAt))
             {
                 sb.AppendLine($"# {e.Title}");
                 sb.AppendLine($"*Date:* {e.CreatedAt:yyyy-MM-dd}");
-                sb.AppendLine($"*Mood:* {e.PrimaryMood}" + (e.SecondaryMoods.Any() ? $" | Secondary: {string.Join(", ", e.SecondaryMoods)}" : ""));
-                sb.AppendLine($"*Tags:* {string.Join(", ", e.Tags)}");
+                sb.AppendLine($"*Mood:* {e.PrimaryMood}" + (e.SecondaryMoods != null && e.SecondaryMoods.Any() ? $" | Secondary: {string.Join(", ", e.SecondaryMoods)}" : ""));
+                sb.AppendLine($"*Tags:* {(e.Tags != null ? string.Join(", ", e.Tags) : "")}");
                 sb.AppendLine();
                 sb.AppendLine(e.Content);
                 sb.AppendLine("\n---\n");
@@ -183,15 +215,27 @@ namespace Journal_Entry.Components.Services
         // ===============================
         // HELPERS
         // ===============================
-        private void ParseEntryFields(JournalEntry entry)
-        {
-            entry.SecondaryMoods = string.IsNullOrWhiteSpace(entry.SecondaryMoods?.ToString())
-                ? new List<string>()
-                : entry.SecondaryMoods.ToString().Split(',').ToList();
 
-            entry.Tags = string.IsNullOrWhiteSpace(entry.Tags?.ToString())
-                ? new List<string>()
-                : entry.Tags.ToString().Split(',').ToList();
+        private JournalEntry ConvertFromDb(JournalEntryDb dbEntry)
+        {
+            return new JournalEntry
+            {
+                Id = dbEntry.Id,
+                CreatedAt = dbEntry.CreatedAt,
+                Title = dbEntry.Title,
+                Content = dbEntry.Content,
+                PrimaryMood = dbEntry.PrimaryMood,
+                SecondaryMoods = string.IsNullOrWhiteSpace(dbEntry.SecondaryMoods)
+                    ? new List<string>()
+                    : dbEntry.SecondaryMoods.Split(',', StringSplitOptions.RemoveEmptyEntries)
+                                            .Select(s => s.Trim())
+                                            .ToList(),
+                Tags = string.IsNullOrWhiteSpace(dbEntry.Tags)
+                    ? new List<string>()
+                    : dbEntry.Tags.Split(',', StringSplitOptions.RemoveEmptyEntries)
+                                  .Select(s => s.Trim())
+                                  .ToList()
+            };
         }
     }
 }

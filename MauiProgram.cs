@@ -1,9 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
-
 using Journal_Entry.Components.Services;
-SQLitePCL.Batteries.Init();
-
-
 
 namespace Journal_Entry
 {
@@ -11,24 +7,35 @@ namespace Journal_Entry
     {
         public static MauiApp CreateMauiApp()
         {
-            var builder = MauiApp.CreateBuilder();
-            builder
-                .UseMauiApp<App>()
-                .ConfigureFonts(fonts =>
-                {
-                    fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-                });
+            try
+            {
+                // Move SQLite initialization inside the method
+                SQLitePCL.Batteries.Init();
 
-            builder.Services.AddMauiBlazorWebView();
-            builder.Services.AddSingleton<JournalService>();
-            builder.Services.AddSingleton<PdfExportService>();
+                var builder = MauiApp.CreateBuilder();
+                builder
+                    .UseMauiApp<App>()
+                    .ConfigureFonts(fonts =>
+                    {
+                        fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+                    });
+
+                builder.Services.AddMauiBlazorWebView();
+                builder.Services.AddSingleton<JournalService>();
+                builder.Services.AddSingleton<PdfExportService>();
 
 #if DEBUG
-            builder.Services.AddBlazorWebViewDeveloperTools();
-    		builder.Logging.AddDebug();
+                builder.Services.AddBlazorWebViewDeveloperTools();
+                builder.Logging.AddDebug();
 #endif
-
-            return builder.Build();
+                return builder.Build();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"STARTUP ERROR: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"STACK TRACE: {ex.StackTrace}");
+                throw;
+            }
         }
     }
 }

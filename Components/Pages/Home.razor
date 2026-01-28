@@ -1,0 +1,159 @@
+﻿<link href="css/home.css" rel="stylesheet" />
+@page "/"
+@using Journal_Entry.Components.Services
+@using Journal_Entry.Components.Models
+@inject JournalService JournalService
+
+<div class="home-container">
+    <div class="overlay">
+        <div class="welcome-header">
+            <h1>Good Evening <span class="emoji">&#x1F319;</span></h1>
+            <h1><span class="emoji">&#x1F4D4;</span> Ready To Journal?</h1>
+            <p>Capture your thoughts, track your moods, and reflect on your journey</p>
+        </div>
+
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="stat-icon"><span class="emoji">&#x1F525;</span></div>
+                <div class="stat-label">DAY STREAK</div>
+                <div>@dayStreak</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><span class="emoji">&#x1F4DD;</span></div>
+                <div class="stat-label">TOTAL ENTRIES</div>
+                <div>@totalEntries</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><span class="emoji">&#x1F3C6;</span></div>
+                <div class="stat-label">BEST STREAK</div>
+                <div>@bestStreak</div>
+            </div>
+        </div>
+
+        <div class="action-cards">
+            <a href="/journal" class="action-card">
+                <div class="action-icon">✏️</div>
+                <div class="action-title">Write Today's Entry</div>
+                <div class="action-desc">Edit your entry for today. Start your daily reflection</div>
+            </a>
+
+            <a href="/timeline" class="action-card">
+                <div class="action-icon"><span class="emoji">&#x1F4D6;</span></div>
+                <div class="action-title">Browse Entries</div>
+                <div class="action-desc">Read and manage your past entries</div>
+            </a>
+
+            <a href="/calendar" class="action-card">
+                <div class="action-icon"><span class="emoji">&#x1F4C5;</span></div>
+                <div class="action-title">Calendar View</div>
+                <div class="action-desc">See your journaling journey at a glance</div>
+            </a>
+
+            <a href="/dashboard" class="action-card">
+                <div class="action-icon"><span class="emoji">&#x1F4CA;</span></div>
+                <div class="action-title">View Analytics</div>
+                <div class="action-desc">Explore insights about your moods and habits</div>
+            </a>
+        </div>
+
+        <div class="writeabout-section">
+            <div class="writeabout-header">
+                <span><span class="emoji">&#x270D;&#xFE0F;</span></span>
+                <span>Write About</span>
+            </div>
+
+            <div class="writeabout-cards">
+                <div class="writeabout-card">
+                    <span class="writeabout-card-icon"><span class="emoji">&#x1F4AD;</span></span>
+                    <div class="tip-title">Reflection</div>
+                    <div>What made you smile today?</div>
+                </div>
+
+                <div class="writeabout-card">
+                    <span class="writeabout-card-icon"><span class="emoji">&#x1F50D;</span></span>
+                    <div class="tip-title">Awareness</div>
+                    <div>What's something you're avoiding?</div>
+                </div>
+
+                <div class="writeabout-card">
+                    <span class="writeabout-card-icon"><span class="emoji">&#x1F389;</span></span>
+                    <div class="tip-title">Celebration</div>
+                    <div>One win from today was…</div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="tips-section">
+            <div class="tips-header">
+                <span><span class="emoji">&#x1F4A1;</span></span>
+                <span>Journaling Tips</span>
+            </div>
+
+            <div class="tip-card">
+                <div class="tip-title">Be Consistent:</div>
+                <div>Try to write every day, even if it's just a few sentences.</div>
+            </div>
+
+            <div class="tip-card">
+                <div class="tip-title">Be Honest:</div>
+                <div>Your journal is a safe space for your true thoughts and feelings.</div>
+            </div>
+
+            <div class="tip-card">
+                <div class="tip-title">Reflect:</div>
+                <div>Use your journal to track patterns and growth over time.</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private int totalEntries = 0;
+    private int dayStreak = 0;
+    private int bestStreak = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var entries = await JournalService.GetAllEntriesAsync();
+        totalEntries = entries.Count;
+
+        // Calculate streaks
+        CalculateStreaks(entries);
+    }
+
+    private void CalculateStreaks(List<JournalEntry> entries)
+    {
+        if (!entries.Any()) return;
+
+        var sortedDates = entries.Select(e => e.CreatedAt.Date).Distinct().OrderByDescending(d => d).ToList();
+
+        // Calculate current streak
+        dayStreak = 0;
+        var today = DateTime.Today;
+        for (int i = 0; i < sortedDates.Count; i++)
+        {
+            var expectedDate = today.AddDays(-i);
+            if (sortedDates[i] == expectedDate)
+                dayStreak++;
+            else
+                break;
+        }
+
+        // Calculate best streak
+        int currentStreak = 1;
+        bestStreak = 1;
+        for (int i = 0; i < sortedDates.Count - 1; i++)
+        {
+            if ((sortedDates[i] - sortedDates[i + 1]).Days == 1)
+            {
+                currentStreak++;
+                bestStreak = Math.Max(bestStreak, currentStreak);
+            }
+            else
+            {
+                currentStreak = 1;
+            }
+        }
+    }
+}

@@ -1,72 +1,95 @@
-﻿@page "/calendar"
+﻿<link href="css/calender.css" rel="stylesheet" />
+@page "/calendar"
 @using Journal_Entry.Components.Services
 @using Journal_Entry.Components.Models
 @inject JournalService JournalService
 
 <div class="app-background">
-<div class="app-background-overlay">
-<div class="calendar-view">
-    <div class="header">
-        <h3>📅 Calendar View</h3>
-    </div>
-
-    <div class="calendar-controls">
-        <button class="btn btn-secondary" @onclick="PreviousMonth">◀ Previous</button>
-        <h4>@CurrentMonth.ToString("MMMM yyyy")</h4>
-        <button class="btn btn-secondary" @onclick="NextMonth">Next ▶</button>
-    </div>
-
-    <div class="calendar-grid">
-        <!-- Day headers -->
-        <div class="day-header">Sun</div>
-        <div class="day-header">Mon</div>
-        <div class="day-header">Tue</div>
-        <div class="day-header">Wed</div>
-        <div class="day-header">Thu</div>
-        <div class="day-header">Fri</div>
-        <div class="day-header">Sat</div>
-
-        @foreach (var day in CalendarDays)
-        {
-            <div class="day-cell @(day.IsCurrentMonth ? "" : "other-month")">
-                <div class="day-number">@day.Date.Day</div>
+    <div class="app-background-overlay">
+        <div class="calendar-view">
+            <div class="header">
+                <h3><span class="emoji">&#x1F4C5;</span> Calendar View</h3>
             </div>
-        }
-    </div>
+            <div class="calendar-controls">
+                <button class="btn btn-secondary" @onclick="PreviousMonth"><span class="emoji">&#x25C0;</span> Previous</button>
+                <h4>@CurrentMonth.ToString("MMMM yyyy")</h4>
+                <button class="btn btn-secondary" @onclick="NextMonth">Next <span class="emoji">&#x25B6;</span></button>
+            </div>
+            <div class="calendar-grid">
+                <!-- Day headers -->
+                <div class="day-header">Sun</div>
+                <div class="day-header">Mon</div>
+                <div class="day-header">Tue</div>
+                <div class="day-header">Wed</div>
+                <div class="day-header">Thu</div>
+                <div class="day-header">Fri</div>
+                <div class="day-header">Sat</div>
 
-    <div class="streak-panel">
-        <div class="streak-item">
-            <div class="streak-icon">🔥</div>
-            <div class="streak-info">
-                <div class="streak-label">Current Streak</div>
-                <div class="streak-value">0</div>
+                @foreach (var day in CalendarDays)
+                {
+                    var entry = GetEntryForDate(day.Date);
+                    var moodEmoji = GetMoodEmoji(entry?.PrimaryMood);
+                    var hasEntry = entry != null;
+
+                    <div class="day-cell @(day.IsCurrentMonth ? "" : "other-month") @(hasEntry ? "has-entry" : "")"
+                         @onclick="() => NavigateToEntry(day.Date)">
+                        <div class="day-number">@day.Date.Day</div>
+                        @if (hasEntry)
+                        {
+                            <div class="mood-indicator">@((MarkupString)moodEmoji)</div>
+                        }
+                    </div>
+                }
             </div>
-        </div>
-        <div class="streak-item">
-            <div class="streak-icon">🏆</div>
-            <div class="streak-info">
-                <div class="streak-label">Longest Streak</div>
-                <div class="streak-value">0</div>
-            </div>
-        </div>
-        <div class="streak-item">
-            <div class="streak-icon">📊</div>
-            <div class="streak-info">
-                <div class="streak-label">Total Entries</div>
-                <div class="streak-value">0</div>
+            <div class="streak-panel">
+                <div class="streak-item">
+                    <div class="streak-icon"><span class="emoji">&#x1F525;</span></div>
+                    <div class="streak-info">
+                        <div class="streak-label">Current Streak</div>
+                        <div class="streak-value">@currentStreak</div>
+                    </div>
+                </div>
+                <div class="streak-item">
+                    <div class="streak-icon"><span class="emoji">&#x1F3C6;</span></div>
+                    <div class="streak-info">
+                        <div class="streak-label">Longest Streak</div>
+                        <div class="streak-value">@longestStreak</div>
+                    </div>
+                </div>
+                <div class="streak-item">
+                    <div class="streak-icon"><span class="emoji">&#x1F4CA;</span></div>
+                    <div class="streak-info">
+                        <div class="streak-label">Total Entries</div>
+                        <div class="streak-value">@totalEntries</div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
-</div>
-</div>
+
 @code {
     private DateTime CurrentMonth = new(DateTime.Today.Year, DateTime.Today.Month, 1);
     private List<CalendarDay> CalendarDays = new();
+    private List<JournalEntry> allEntries = new();
+    private Dictionary<DateTime, JournalEntry> entriesByDate = new();
 
-    protected override void OnInitialized()
+    private int currentStreak = 0;
+    private int longestStreak = 0;
+    private int totalEntries = 0;
+
+    protected override async Task OnInitializedAsync()
     {
+        await LoadEntries();
         GenerateCalendar();
+        CalculateStats();
+    }
+
+    private async Task LoadEntries()
+    {
+        allEntries = await JournalService.GetAllEntriesAsync();
+        entriesByDate = allEntries.ToDictionary(e => e.CreatedAt.Date, e => e);
+        totalEntries = allEntries.Count;
     }
 
     private void PreviousMonth()
@@ -84,11 +107,10 @@
     private void GenerateCalendar()
     {
         CalendarDays.Clear();
-
         var firstDayOfMonth = new DateTime(CurrentMonth.Year, CurrentMonth.Month, 1);
         var startDay = firstDayOfMonth.AddDays(-(int)firstDayOfMonth.DayOfWeek);
 
-        for (int i = 0; i < 42; i++) // 6 weeks
+        for (int i = 0; i < 42; i++)
         {
             var date = startDay.AddDays(i);
             CalendarDays.Add(new CalendarDay
@@ -96,6 +118,68 @@
                 Date = date,
                 IsCurrentMonth = date.Month == CurrentMonth.Month
             });
+        }
+    }
+
+    private JournalEntry? GetEntryForDate(DateTime date)
+    {
+        entriesByDate.TryGetValue(date.Date, out var entry);
+        return entry;
+    }
+
+    private string GetMoodEmoji(string? mood)
+    {
+        return mood switch
+        {
+            "Happy" => "<span class=\"emoji\">&#x1F60A;</span>",
+            "Excited" => "<span class=\"emoji\">&#x1F603;</span>",
+            "Calm" => "<span class=\"emoji\">&#x1F60C;</span>",
+            "Sad" => "<span class=\"emoji\">&#x1F622;</span>",
+            "Neutral" => "<span class=\"emoji\">&#x1F610;</span>",
+            "Angry" => "<span class=\"emoji\">&#x1F620;</span>",
+            "Anxious" => "<span class=\"emoji\">&#x1F630;</span>",
+            _ => "<span class=\"emoji\">&#x1F610;</span>"
+        };
+    }
+
+    private void NavigateToEntry(DateTime date)
+    {
+        // Navigate to journal page for this date
+    }
+
+    private void CalculateStats()
+    {
+        if (!allEntries.Any()) return;
+
+        var sortedDates = allEntries.Select(e => e.CreatedAt.Date)
+                                   .Distinct()
+                                   .OrderByDescending(d => d)
+                                   .ToList();
+
+        currentStreak = 0;
+        var today = DateTime.Today;
+        for (int i = 0; i < sortedDates.Count; i++)
+        {
+            var expectedDate = today.AddDays(-i);
+            if (sortedDates[i] == expectedDate)
+                currentStreak++;
+            else
+                break;
+        }
+
+        int tempStreak = 1;
+        longestStreak = 1;
+        for (int i = 0; i < sortedDates.Count - 1; i++)
+        {
+            if ((sortedDates[i] - sortedDates[i + 1]).Days == 1)
+            {
+                tempStreak++;
+                longestStreak = Math.Max(longestStreak, tempStreak);
+            }
+            else
+            {
+                tempStreak = 1;
+            }
         }
     }
 
