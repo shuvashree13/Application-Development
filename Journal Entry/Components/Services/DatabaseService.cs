@@ -22,9 +22,7 @@ namespace Journal_Entry.Components.Services
             _db.CreateTableAsync<UserSettings>().Wait();
         }
 
-        // ===============================
-        // SETTINGS
-        // ===============================
+        
 
         // Get user settings
         public async Task<UserSettings> GetSettingsAsync()
@@ -44,9 +42,7 @@ namespace Journal_Entry.Components.Services
             return _db.InsertOrReplaceAsync(settings);
         }
 
-        // ===============================
-        // JOURNAL ENTRIES
-        // ===============================
+        
 
         // Get all journal entries
         public Task<List<JournalEntry>> GetAllEntriesAsync()
