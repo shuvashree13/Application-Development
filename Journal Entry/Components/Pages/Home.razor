@@ -118,7 +118,6 @@
         var entries = await JournalService.GetAllEntriesAsync();
         totalEntries = entries.Count;
 
-        // Calculate streaks
         CalculateStreaks(entries);
     }
 
